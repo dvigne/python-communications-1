@@ -5,7 +5,7 @@ import time
 q = np.arange(0,1, 0.01)
 p = 0.35
 p2 = 0.4
-N = 100000 #number of bits
+N = 1000 #number of bits
 
 #transmit the bits trhough the channel
 def bsc(txBits,p): #simulates a binary symmetric channel with transition probability p

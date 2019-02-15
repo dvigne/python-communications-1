@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 #set q and p
-q = np.arange(0,1, 0.01)
+q = np.arange(0,1.01, 0.01)
 p = 0.35
 p2 = 0.4
-N = 1000 #number of bits
+N = 100000 #number of bits
 
 #transmit the bits trhough the channel
 def bsc(txBits,p): #simulates a binary symmetric channel with transition probability p
@@ -16,15 +16,17 @@ def bsc(txBits,p): #simulates a binary symmetric channel with transition probabi
     return rxBits
 
 def bac(txBits,p1, p2): #simulates a binary symmetric channel with transition probability p
-    flips = np.zeros((N,),dtype='bool') #there are no flips at this point
-    x = np.random.rand(N)
-    for bit in range(0, len(txBits)):
-        if(txBits[bit] == 0):
-            flips[x < p1] = True
-        else:
-            flips[x < p2] = True
+    rxBits = np.zeros_like(txBits)
+    flips = np.zeros_like(rxBits[rxBits == 0], dtype='bool')
+    x = np.random.rand(flips.shape[0])
+    flips[x < p1] = True
+    rxBits[rxBits == 0] = np.logical_xor(rxBits[rxBits == 0], flips)
 
-    rxBits = np.logical_xor(txBits,flips)
+    flips = np.zeros_like(rxBits[rxBits > 0], dtype='bool')
+    x = np.random.rand(flips.shape[0])
+    flips[x < p2] = True
+    rxBits[rxBits > 0] = np.logical_xor(rxBits[rxBits > 0], flips)
+
     return rxBits
 
 #Perform both ML and MAP detection at the reciever
@@ -33,29 +35,11 @@ def MLDetector(rxBits): #simulates an ML Detector, assumes p < 0.5
 
 def MAPDetector(rxBits,q,p): #simulates a MAP detector
     if q < p:
-        return np.ones((N,),dtype='bool')
+        return np.ones_like(rxBits)
     if q > p and q <= 1-p:
         return rxBits
     if q > 1-p:
-        return np.zeros((N,),dtype='bool')
-
-def MAPDetectorB(rxBits,q,p1,p2): #simulates a MAP detector
-    for x in range(0, len(rxBits)):
-        if(rxBits[x] == 0):
-            if q < p1:
-                rxBits[x] = 1
-            if q > p1 and q <= 1-p1:
-                pass
-            if q > 1-p1:
-                rxBits[x] = 0
-        else:
-            if q < p2:
-                rxBits[x] = 1
-            if q > p2 and q <= 1-p2:
-                pass
-            if q > 1-p2:
-                rxBits[x] = 0
-    return rxBits
+        return np.zeros_like(rxBits)
 
 
 # Channel A
@@ -92,7 +76,9 @@ for x in np.nditer(q):
     mapA.append(PEMAP)
 
     # Channel B
-    MAPEstimates = MAPDetectorB(rxBitsB,x,p, p2)
+    MAPEstimates = np.zeros_like(rxBitsB, dtype='bool')
+    MAPEstimates[rxBitsB == 0] = MAPDetector(rxBitsB[rxBitsB == 0],x,p)
+    MAPEstimates[rxBitsB > 0] = MAPDetector(rxBitsB[rxBitsB > 0],x,p2)
     PEMAP = np.sum(np.logical_xor(txBits,MAPEstimates))/N
     print('Channel B probability of error for MAP estimator is %f'%PEMAP)
     mapB.append(PEMAP)

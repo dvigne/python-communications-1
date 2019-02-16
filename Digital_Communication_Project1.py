@@ -48,6 +48,7 @@ PEMLA = []
 PEMLB = []
 mapA = []
 mapB = []
+start = time.time()
 
 for x in np.nditer(q):
     # Setup
@@ -83,6 +84,7 @@ for x in np.nditer(q):
     print('Channel B probability of error for MAP estimator is %f'%PEMAP)
     mapB.append(PEMAP)
 
+print("="*50, "Finished Execution in %.2f seconds" % (time.time()-start), sep="\n", end='\n\n')
 
 fig1, ax = plt.subplots()
 fig2, bx = plt.subplots()

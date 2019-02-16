@@ -17,15 +17,16 @@ def bsc(txBits,p): #simulates a binary symmetric channel with transition probabi
 
 def bac(txBits,p1, p2): #simulates a binary symmetric channel with transition probability p
     rxBits = np.zeros_like(txBits)
-    flips = np.zeros_like(rxBits[rxBits == 0], dtype='bool')
+    flips = np.zeros_like(rxBits[txBits == 0], dtype='bool')
     x = np.random.rand(flips.shape[0])
     flips[x < p1] = True
-    rxBits[rxBits == 0] = np.logical_xor(rxBits[rxBits == 0], flips)
+    rxBits[txBits == 0] = np.logical_xor(rxBits[txBits == 0], flips)
 
-    flips = np.zeros_like(rxBits[rxBits > 0], dtype='bool')
+    flips = np.zeros_like(txBits[txBits > 0], dtype='bool')
     x = np.random.rand(flips.shape[0])
     flips[x < p2] = True
-    rxBits[rxBits > 0] = np.logical_xor(rxBits[rxBits > 0], flips)
+    rxBits[txBits > 0] = np.logical_xor(rxBits[txBits > 0], flips)
+    rxBits = np.logical_xor(txBits, rxBits)
 
     return rxBits
 

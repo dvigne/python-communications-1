@@ -86,17 +86,15 @@ for x in np.nditer(q):
 
 print("="*50, "Finished Execution in %.2f seconds" % (time.time()-start), sep="\n", end='\n\n')
 
-fig1, ax = plt.subplots()
+# fig1, ax = plt.subplots()
 fig2, bx = plt.subplots()
-ax.plot(q, PEMLA, label="PEMLA")
-ax.plot(q, mapA, label="Map A")
-ax.legend()
+# ax.plot(q, PEMLA, label="PEMLA")
+# ax.plot(q, mapA, label="Map A")
+# ax.legend()
 bx.plot(q, PEMLB, label="PEML B")
 bx.plot(q, mapB, label="Map B")
 bx.legend()
-ax.set(xlabel='Q', ylabel='Probability of Error %',
-       title='Channel A')
-bx.set(xlabel='Q', ylabel='Probability of Error %',
-       title='Channel B')
+# ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A')
+bx.set(xlabel='Q', ylabel='Probability of Error %', title='Channel B')
 
 plt.show()

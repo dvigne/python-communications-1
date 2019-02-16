@@ -35,7 +35,7 @@ def MLDetector(rxBits): #simulates an ML Detector, assumes p < 0.5
     return rxBits
 
 def MAPDetector(rxBits,q,p): #simulates a MAP detector
-    if q < p:
+    if q <= p:
         return np.ones_like(rxBits)
     if q > p and q <= 1-p:
         return rxBits
@@ -95,7 +95,7 @@ fig2, bx = plt.subplots()
 bx.plot(q, PEMLB, label="PEML B")
 bx.plot(q, mapB, label="Map B")
 bx.legend()
-# ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A')
+# ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A With %d Bits' % N)
 bx.set(xlabel='Q', ylabel='Probability of Error %', title='Channel B With %d Bits' % N)
 
 plt.show()

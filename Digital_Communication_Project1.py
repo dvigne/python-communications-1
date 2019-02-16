@@ -35,11 +35,11 @@ def MLDetector(rxBits): #simulates an ML Detector, assumes p < 0.5
     return rxBits
 
 def MAPDetector(rxBits,q,p): #simulates a MAP detector
-    if q <= p:
+    if q < p:
         return np.ones_like(rxBits)
-    if q > p and q <= 1-p:
+    if q > p and q < 1-p:
         return rxBits
-    if q > 1-p:
+    if q >= 1-p:
         return np.zeros_like(rxBits)
 
 
@@ -87,15 +87,15 @@ for x in np.nditer(q):
 
 print("="*50, "Finished Execution in %.2f seconds" % (time.time()-start), sep="\n", end='\n\n')
 
-# fig1, ax = plt.subplots()
+fig1, ax = plt.subplots()
 fig2, bx = plt.subplots()
-# ax.plot(q, PEMLA, label="PEMLA")
-# ax.plot(q, mapA, label="Map A")
-# ax.legend()
+ax.plot(q, PEMLA, label="PEMLA")
+ax.plot(q, mapA, label="Map A")
+ax.legend()
 bx.plot(q, PEMLB, label="PEML B")
 bx.plot(q, mapB, label="Map B")
 bx.legend()
-# ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A With %d Bits' % N)
+ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A With %d Bits' % N)
 bx.set(xlabel='Q', ylabel='Probability of Error %', title='Channel B With %d Bits' % N)
 
 plt.show()

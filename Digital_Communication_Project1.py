@@ -95,6 +95,6 @@ bx.plot(q, PEMLB, label="PEML B")
 bx.plot(q, mapB, label="Map B")
 bx.legend()
 # ax.set(xlabel='Q', ylabel='Probability of Error %', title='Channel A')
-bx.set(xlabel='Q', ylabel='Probability of Error %', title='Channel B')
+bx.set(xlabel='Q', ylabel='Probability of Error %', title='Channel B With %d Bits' % N)
 
 plt.show()
